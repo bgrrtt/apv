@@ -1,12 +1,14 @@
 ---
 - hosts: local
   become: yes
+  vars_files:
+    - /site/configuration.yml
   tasks:
     - debug:
         msg: "{{ DOMAIN_NAME }}"
   roles:
   #   - { role: geerlingguy.firewall }
-    - { role: geerlingguy.nginx, tags: ['webserver'] }
+  #   - { role: geerlingguy.nginx, tags: ['webserver'] }
   #   - { role: geerlingguy.php, tags: ['php'] }
   #   - { role: geerlingguy.php-pecl, tags: ['php'] }
   #   - { role: geerlingguy.composer }
