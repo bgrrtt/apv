@@ -1,0 +1,15 @@
+---
+DOMAIN_NAME: craft
+LOCAL_IP: 10.10.10.10
+
+
+ansible_roles_list:
+- geerlingguy.adminer
+- geerlingguy.composer
+- geerlingguy.firewall
+- geerlingguy.git
+- geerlingguy.mysql
+- geerlingguy.nginx
+- geerlingguy.nodejs
+- geerlingguy.php
+- geerlingguy.php-mysql
