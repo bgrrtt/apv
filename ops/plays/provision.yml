@@ -1,0 +1,14 @@
+---
+- hosts: local
+  become: yes
+  tasks:
+    - debug:
+        msg: "{{ DOMAIN_NAME }}"
+  roles:
+  #   - { role: geerlingguy.firewall }
+    - { role: geerlingguy.nginx, tags: ['webserver'] }
+  #   - { role: geerlingguy.php, tags: ['php'] }
+  #   - { role: geerlingguy.php-pecl, tags: ['php'] }
+  #   - { role: geerlingguy.composer }
+  #   - { role: geerlingguy.mysql, tags: ['database'] }
+  #   - { role: geerlingguy.php-mysql, tags: ['php', 'database'] }

@@ -1,0 +1,9 @@
+---
+- hosts: local
+  become: yes
+  vars_files:
+    - /site/configuration.yml
+  roles:
+    - apt
+    - galaxy
+    - zim

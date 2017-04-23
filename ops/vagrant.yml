@@ -1,6 +1,0 @@
----
-- hosts: local
-  # become: yes
-  # gather_facts: yes
-  roles:
-    - apt
