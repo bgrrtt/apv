@@ -1,0 +1,44 @@
+---
+# tasks file for zim
+- name: install dependencies
+  apt: pkg={{ item }} state=present
+  with_items:
+    - zsh
+    - git
+  when: ansible_domain == "dev"
+
+- name: install zim
+  git: repo=https://github.com/bgrrtt/dotfiles.git dest=~/.zim
+  become: false
+  when: ansible_domain == "dev"
+
+- name: get rid of existing ~/.zshrc
+  file: path=~/.zshrc state=absent
+  become: false
+  when: ansible_domain == "dev"
+
+- name: set .zshrc
+  template:
+    src: zshrc.j2
+    dest: ~/.zshrc
+  become: false
+  when: ansible_domain == "dev"
+
+- name: set .zlogin
+  template:
+    src: zlogin.j2
+    dest: ~/.zlogin
+  become: false
+  when: ansible_domain == "dev"
+
+- name: set .zimrc
+  template:
+    src: zimrc.j2
+    dest: ~/.zimrc
+  become: false
+  when: ansible_domain == "dev"
+
+- name: switch to zsh
+  user: name=vagrant shell=/usr/bin/zsh
+  become: true
+  when: ansible_domain == "dev"
