@@ -1,1 +1,10 @@
 .vagrant
+/ops/roles/geerlingguy.adminer
+/ops/roles/geerlingguy.composer
+/ops/roles/geerlingguy.firewall
+/ops/roles/geerlingguy.git
+/ops/roles/geerlingguy.mysql
+/ops/roles/geerlingguy.nginx
+/ops/roles/geerlingguy.nodejs
+/ops/roles/geerlingguy.php
+/ops/roles/geerlingguy.php-mysql
