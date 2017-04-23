@@ -1,20 +1,20 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-DOMAIN_NAME = "project"
-LOCAL_IP = "10.10.10.10"
+require 'yaml'
+vmconfig = YAML.load_file("./configuration.yml")
 
 Vagrant.configure("2") do |config|
 
   # Box Image
-  config.vm.box = "bento/ubuntu-14.04"
+  config.vm.box = "bento/ubuntu-16.04"
 
-  # Don't grab my ssh!
-  config.ssh.insert_key = false
+  # Define VM
+  config.vm.define vmconfig['DOMAIN_NAME'] + ".dev"
 
   # Virtualbox Configuartion
   config.vm.provider :virtualbox do |v|
-    v.name = DOMAIN_NAME + ".vm"
+    v.name = vmconfig['DOMAIN_NAME'] + ".vm"
     v.memory = 2048
     v.cpus = 2
     v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
@@ -24,23 +24,23 @@ Vagrant.configure("2") do |config|
     v.customize ["storagectl", :id, "--name", "SATA Controller", "--hostiocache", "on"]
   end
 
-  # Set hostname and IP
-  config.vm.hostname = DOMAIN_NAME + ".dev"
-  config.vm.network :private_network, ip: LOCAL_IP
+  # SSH Configuartion
+  config.ssh.insert_key = false
 
-  # Sync local folders for dev
+  # Set Hostname and IP
+  config.vm.hostname = vmconfig['DOMAIN_NAME'] + ".dev"
+  config.vm.network :private_network, ip: vmconfig['LOCAL_IP']
+
+  # Sync folders
   config.vm.synced_folder ".", "/nfs", type: "nfs", mount_options: ['rw', 'vers=3', 'tcp', 'fsc' ,'actimeo=2']
   config.bindfs.bind_folder "/nfs", "/site"
-
-  # Set name of the VM
-  config.vm.define DOMAIN_NAME do |yo_thing|
-  end
+  config.bindfs.bind_folder "/nfs/ops", "/ops"
 
   # Provison with Ansible
   config.vm.provision "ansible_local" do |ansible|
-    ansible.playbook = "vagrant.yml"
-    ansible.provisioning_path = "/site/ops"
-    ansible.inventory_path = "/site/ops/inventory/hosts"
+    ansible.provisioning_path = "/ops"
+    ansible.playbook = "plays/vagrant.yml"
+    ansible.inventory_path = "inventory/hosts"
     ansible.limit = "all"
     ansible.version = "latest"
     ansible.verbose = false
